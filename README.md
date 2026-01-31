@@ -50,7 +50,7 @@ By choosing this architecture, we achieve several key DevOps milestones:
 - **Performance:** The site is delivered via **CDN (Content Delivery Network)**, meaning the **"Cold Start"** time is non-existent compared to a traditional containerized backend.
 
 ## 5. Infrastructure Strategy (Immutable Infrastructure)
-The code is never "manually" uploaded to a server. It follows an **Immutable Infrastructure pattern:**
+The code is never **"manually"** uploaded to a server. It follows an **Immutable Infrastructure pattern:**
 
 - **Containerization:** The app is wrapped in a hardened Nginx Docker image.
 

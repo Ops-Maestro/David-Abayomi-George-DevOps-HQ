@@ -47,7 +47,7 @@ By choosing this architecture, we achieve several key DevOps milestones:
 
 - **Security (SecOps):** There is no backend server to patch, no SQL database to protect from injection, and no session cookies to hijack.
 
-- **Performance:** The site is delivered via CDN (Content Delivery Network), meaning the "Cold Start" time is non-existent compared to a traditional containerized backend.
+- **Performance:** The site is delivered via **CDN (Content Delivery Network)**, meaning the **"Cold Start"** time is non-existent compared to a traditional containerized backend.
 
 ## 5. Infrastructure Strategy (Immutable Infrastructure)
 The code is never "manually" uploaded to a server. It follows an **Immutable Infrastructure pattern:**

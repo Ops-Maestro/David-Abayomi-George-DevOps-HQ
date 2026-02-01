@@ -17,12 +17,12 @@ function closeModal(modalId) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Initialize AOS
+    // 1. Initialize AOS (Animate on Scroll)
     if (typeof AOS !== 'undefined') {
         AOS.init({ duration: 1000, once: true, offset: 100 });
     }
 
-    // 2. Initialize Swiper Slider
+    // 2. Initialize Swiper Slider for Projects
     const swiper = new Swiper('.project-slider', {
         slidesPerView: 1,
         spaceBetween: 30,
@@ -44,30 +44,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // 3. Skill Meter Animation
+    // 3. IMPROVED SKILL METER ANIMATION (Repeats on Scroll)
     const skillBars = document.querySelectorAll('.skill-bar-fill');
-    const triggerSkills = () => {
-        skillBars.forEach(bar => {
+    
+    const skillObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            const bar = entry.target;
             const level = bar.getAttribute('data-level');
-            if (level) {
-                const percentage = (parseInt(level) / 9) * 100;
-                bar.style.width = percentage + '%';
+
+            if (entry.isIntersecting) {
+                // When section is viewed, fill the bar to the level
+                setTimeout(() => {
+                    bar.style.setProperty('width', level, 'important');
+                }, 150); 
+            } else {
+                // When scrolled away, reset the width so it re-animates later
+                bar.style.setProperty('width', '0', 'important');
             }
         });
-    };
+    }, { threshold: 0.2 });
 
-    const skillsSection = document.querySelector('#skills');
-    if (skillsSection) {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    triggerSkills();
-                    observer.unobserve(skillsSection);
-                }
-            });
-        }, { threshold: 0.2 });
-        observer.observe(skillsSection);
-    }
+    skillBars.forEach(bar => skillObserver.observe(bar));
 
     // 4. Form Submission Handling (AJAX)
     const form = document.getElementById('contact-form');
@@ -108,7 +105,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 5. GLOBAL TIMELINE THREAD SCROLL LOGIC
-    // This finds every .timeline on the page and moves its .timeline-progress child
     const handleTimelineScroll = () => {
         const timelines = document.querySelectorAll('.timeline');
         const windowHeight = window.innerHeight;
@@ -118,12 +114,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!progressLine) return;
 
             const rect = timeline.getBoundingClientRect();
-            
-            // Trigger starts when the top of the timeline is 80% down the screen
             const startTrigger = windowHeight * 0.8; 
             const progressRaw = (startTrigger - rect.top) / rect.height;
-            
-            // Constrain between 0% and 100%
             const progress = Math.min(Math.max(progressRaw * 100, 0), 100);
             
             progressLine.style.height = `${progress}%`;
@@ -131,5 +123,5 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     window.addEventListener('scroll', handleTimelineScroll);
-    handleTimelineScroll(); // Run once on load to catch initial position
+    handleTimelineScroll(); 
 });
